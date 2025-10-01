@@ -1,9 +1,9 @@
 # Networking - CSCI 420
 # Paul Talaga
-# Sept 9, 2025
-# UDP client/server demo
+# Sept 29, 2025
+# TCP server demo
 
-import socket, threading
+import socket, threading, pickle
 
 listen_port = 5555   # make sure > 1024
 
@@ -13,15 +13,22 @@ def TCPWorker(all_sockets, client_addr):
 				print("Waiting for message")
 
 				msg = all_sockets[client_addr].recv(1000000)
-				msg = msg.decode('UTF-8')
-				print(f"Len {len(msg)} {msg}")
+				if len(msg) == 0:
+					del all_sockets[client_addr]
+					return
+				#msg = msg.decode('UTF-8')
+				decoded = pickle.loads(msg)
+				if 'fname' in decoded.keys():
+					print(f"File from {decoded['username']} Len {len(msg)} ")
+				else:
+					print(f"Len {len(msg)} {decoded}")
 
 				
 				addresses = list(all_sockets.keys())
 
 				for addr in addresses:
 					try:
-						all_sockets[addr].sendall(msg.encode('UTF-8'))
+						all_sockets[addr].sendall(msg)
 					except Exception as e:
 						print(f"Exception {e}")
 						del all_sockets[addr]

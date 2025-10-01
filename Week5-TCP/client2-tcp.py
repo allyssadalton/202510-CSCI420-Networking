@@ -1,7 +1,7 @@
 # Networking - CSCI 420
 # Paul Talaga
-# Sept 9, 2025
-# UDP client/server demo
+# Sept 25, 2025
+# TCP client/server demo
 
 import socket, threading
 
